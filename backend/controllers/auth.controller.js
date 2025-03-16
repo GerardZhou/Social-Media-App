@@ -1,11 +1,13 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import { generateTokenAndSetCookie } from "../lib/utils/generateToken.js";
+
 export const signup = async (req, res) => {
   try {
     const { fullName, username, email, password } = req.body;
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.text(email)) {
+    if (!emailRegex.test(email)) {
       return res.status(400).json({ error: "Invalid email, please try again" });
     }
 
@@ -17,6 +19,12 @@ export const signup = async (req, res) => {
     const existingEmail = await User.findOne({ email });
     if (existingEmail) {
       return res.status(400).json({ error: "Email is already taken" });
+    }
+
+    if (password.length < 6) {
+      return res
+        .status(400)
+        .json({ error: "Password must be at least 6 characters long" });
     }
 
     // hash password
@@ -48,6 +56,7 @@ export const signup = async (req, res) => {
       res.status(400).json({ error: "Invalid user data" });
     }
   } catch (error) {
+    // console.error("Signup Error: ", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
