@@ -1,5 +1,6 @@
 import User from "../models/user.model.js";
 import Notification from "../models/notification.model.js";
+import bcrypt from "bcryptjs";
 export const getUserProfile = async (req, res) => {
   const { username } = req.params;
 
@@ -78,6 +79,38 @@ export const getSuggestUsers = async (req, res) => {
     res.status(200).json(suggestedUsers);
   } catch (error) {
     console.log("getSuggestUsers Error: ", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const updateUser = async (req, res) => {
+  const { fullName, email, username, currentPassword, newPassword, bio, link } =
+    req.body;
+  let { profileImg, coverImg } = req.body;
+
+  const userId = req.user._id;
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    if (
+      (!newPassword && currentPassword) ||
+      (!currentPassword && newPassword)
+    ) {
+      return res
+        .status(400)
+        .json({ error: "Please provide both current and new password" });
+    }
+    if (currentPassword && newPassword) {
+      const isMatch = await bcrypt.compare(currentPassword, user.password);
+      if (!isMatch) {
+        return res.status(400).json({ error: "Current password is incorrect" });
+      }
+    }
+  } catch (error) {
+    console.log("updateUser Error: ", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
