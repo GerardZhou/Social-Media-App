@@ -64,9 +64,13 @@ export const getSuggestUsers = async (req, res) => {
     const userId = req.user._id;
     const usersFollowed = await User.findById(userId).select("following");
     const users = await User.aggregate([
-      { $match: { _id: { $ne: userId } } },
+      { $match: { _id: { $ne: userId } } }, // not equal to userID
       { $sample: { size: 10 } },
     ]);
+
+    const filteredUsers = users.filter(
+      (user) => !usersFollowed.following.includes(user._id)
+    );
   } catch (error) {
     console.log("getSuggestUsers Error: ", error);
     res.status(500).json({ error: "Internal server error" });
