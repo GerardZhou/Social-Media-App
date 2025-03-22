@@ -108,6 +108,18 @@ export const updateUser = async (req, res) => {
       if (!isMatch) {
         return res.status(400).json({ error: "Current password is incorrect" });
       }
+      if (newPassword.length < 6) {
+        return res
+          .status(400)
+          .json({ error: "Password must be at least 6 characters" });
+      }
+
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(newPassword, salt);
+    }
+    if (profileImg) {
+    }
+    if (coverImg) {
     }
   } catch (error) {
     console.log("updateUser Error: ", error);
