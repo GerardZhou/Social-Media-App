@@ -92,7 +92,7 @@ export const updateUser = async (req, res) => {
 
   const userId = req.user._id;
   try {
-    const user = await User.findById(userId);
+    let user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -120,10 +120,20 @@ export const updateUser = async (req, res) => {
       user.password = await bcrypt.hash(newPassword, salt);
     }
     if (profileImg) {
+      if (user.profileImg) {
+        await cloudinary.uploader.destroy(
+          user.profileImg.split("/").pop().split(".")[0]
+        );
+      }
       const uploadedPhoto = await cloudinary.uploader.upload(profileImg);
       profileImg = uploadedPhoto.secure_url;
     }
     if (coverImg) {
+      if (user.coverImg) {
+        await cloudinary.uploader.destroy(
+          user.coverImg.split("/").pop().split(".")[0]
+        );
+      }
       const uploadedPhoto = await cloudinary.uploader.upload(coverImg);
       coverImg = uploadedPhoto.secure_url;
     }
