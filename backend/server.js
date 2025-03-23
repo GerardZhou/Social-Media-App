@@ -4,6 +4,8 @@ import cookieParser from "cookie-parser";
 import { v2 as cloudinary } from "cloudinary";
 import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/user.routes.js";
+import postRoutes from "./routes/post.routes.js";
+
 import connectMongoDB from "./db/connectMongoDB.js";
 
 dotenv.config();
@@ -21,6 +23,7 @@ app.use(express.urlencoded({ extended: true })); // middleware used to parse for
 app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/posts", postRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
