@@ -109,6 +109,12 @@ export const likeUnlikePost = async (req, res) => {
       // like post
       post.likes.push(userId);
       // send notifs as well
+
+      const notification = {
+        user: userId,
+        text: "liked your post",
+        post: postId,
+      };
     }
 
     if (!postId) {
