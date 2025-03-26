@@ -1,5 +1,6 @@
 import User from "../models/user.model.js";
 import Post from "../models/post.model.js";
+import notification from "../models/notification.model.js";
 import { v2 as cloudinary } from "cloudinary";
 
 export const createPost = async (req, res) => {
@@ -110,11 +111,13 @@ export const likeUnlikePost = async (req, res) => {
       post.likes.push(userId);
       // send notifs as well
 
-      const notification = {
-        user: userId,
-        text: "liked your post",
-        post: postId,
-      };
+      const notification = new Notification({
+        from: userId,
+        to: post.user,
+        type: "like",
+      });
+      await notification.save();
+      res.status(200).json({ message: "Post liked" });
     }
 
     if (!postId) {
