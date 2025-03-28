@@ -105,10 +105,18 @@ export const likeUnlikePost = async (req, res) => {
     if (userLikedPost) {
       // unlike post
       await Post.updateOne({ _id: postId }, { $pull: { likes: userId } });
+      await User.updateOne(
+        { _id: post.user },
+        { $pull: { likedPosts: postId } }
+      );
       res.status(200).json({ message: "Post unliked" });
     } else {
       // like post
       post.likes.push(userId);
+      await User.updateOne(
+        { _id: post.user },
+        { $push: { likedPosts: postId } }
+      );
       await post.save();
       // send notifs as well
 
