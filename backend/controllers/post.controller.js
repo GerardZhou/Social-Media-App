@@ -156,8 +156,15 @@ export const getAllPosts = async (req, res) => {
 };
 
 export const getLikedPosts = async (req, res) => {
-  const userId = req.params.id;
+  const user = req.params.id;
+
   try {
+    if (!user) {
+      return res.status(400).json({ error: "Please provide user id" });
+    }
+    const likedPosts = await Post.find({ id: { $in: user.likedPosts } })
+      .populate({ path: "user", select: "-password" })
+      .populate({ path: "comments.user", select: "-password" });
   } catch (error) {
     console.log("Get liked posts controller Error: ", error);
     res.status(500).json({ error: "Internal server error" });
