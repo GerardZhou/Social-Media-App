@@ -154,3 +154,12 @@ export const getAllPosts = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+export const getLikedPosts = async (req, res) => {
+  const userId = req.params.id;
+  try {
+  } catch (error) {
+    console.log("Get liked posts controller Error: ", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
