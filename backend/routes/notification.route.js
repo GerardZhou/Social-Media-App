@@ -4,7 +4,7 @@ import { protectRoute } from "../middleware/protectRoute";
 import {
   getNotifications,
   deleteNotifications,
-} from "../controllers/notification.controller";
+} from "../controllers/notification.controller.js";
 const router = express.Router();
 
 router.get("/", protectRoute, getNotifications);
