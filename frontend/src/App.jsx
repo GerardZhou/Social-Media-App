@@ -6,6 +6,8 @@ import LoginPage from "./pages/auth/login/LoginPage";
 function App() {
   return (
     <div className="flex max-w-6xl mx-auto">
+      {/* Common components outside of Routes */}
+      <Sidebar />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/signup" element={<SignUpPage />} />
