@@ -43,13 +43,14 @@ const SignUpPage = () => {
         return data;
       } catch (error) {
         console.log(error);
+        toast.error(error.message);
       }
     },
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    mutate(formData);
   };
 
   const handleInputChange = (e) => {
