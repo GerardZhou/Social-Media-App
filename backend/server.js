@@ -7,7 +7,12 @@ import userRoutes from "./routes/user.route.js";
 import postRoutes from "./routes/post.route.js";
 import notificationRoutes from "./routes/notification.route.js";
 import connectMongoDB from "./db/connectMongoDB.js";
+import cors from "cors";
 
+const corsOption = {
+  origin: "http://localhost:3000",
+  credentials: true,
+};
 dotenv.config();
 
 cloudinary.config({
@@ -16,6 +21,8 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 const app = express();
+
+app.use(cors(corsOption));
 
 app.use(express.json()); // middleware used to parse req body
 app.use(express.urlencoded({ extended: true })); // middleware used to parse form data (urlencoded)
