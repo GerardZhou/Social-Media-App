@@ -35,9 +35,9 @@ const SignUpPage = () => {
           }),
         });
 
-        if (!res.ok) {
-          throw new Error("Something went wrong");
-        }
+        // if (!res.ok) {
+        //   throw new Error("Something went wrong");
+        // }
         const data = await res.json();
         if (data.error) {
           throw new Error(data.error);
@@ -48,6 +48,9 @@ const SignUpPage = () => {
         console.log(error);
         toast.error(error.message);
       }
+    },
+    onSuccess: () => {
+      toast.success("Account created successfully.");
     },
   });
 
