@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
+import { useQuery } from "@tanstack/react-query";
 
 import HomePage from "./pages/home/HomePage";
 import SignUpPage from "./pages/auth/signup/SignUpPage";
@@ -8,6 +9,7 @@ import Sidebar from "./components/common/Sidebar";
 import RightPanel from "./components/common/RightPanel";
 import NotificationPage from "./pages/notification/NotificationPage";
 import ProfilePage from "./pages/profile/ProfilePage";
+import LoadingSpinner from "./components/common/LoadingSpinner";
 
 function App() {
   const { data, isLoading, error, isError } = useQuery({
@@ -26,6 +28,14 @@ function App() {
       }
     },
   });
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <LoadingSpinner size="lg" />
+      </div>
+    );
+  }
   return (
     <div className="flex max-w-6xl mx-auto">
       {/* Common components outside of Routes */}
