@@ -8,11 +8,15 @@ import { MdPassword } from "react-icons/md";
 import { useMutation } from "@tanstack/react-query";
 
 import { toast } from "react-hot-toast";
+import { useQueryClient } from "@tanstack/react-query";
+
 const LoginPage = () => {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
+
+  const queryClient = useQueryClient();
 
   const {
     mutate: loginMutation,
@@ -44,7 +48,8 @@ const LoginPage = () => {
       }
     },
     onSuccess: () => {
-      toast.success("Logged in successfully.");
+      // refetch authUser to update UI
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
     },
   });
 

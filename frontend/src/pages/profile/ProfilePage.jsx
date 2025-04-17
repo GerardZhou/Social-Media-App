@@ -13,7 +13,7 @@ import { FaLink } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 
 const ProfilePage = () => {
-  useQuery({ queryKey: ["authUser"] });
+  // const {data:authUser, errror} = useQuery({ queryKey: ["authUser"] });
 
   const [coverImg, setCoverImg] = useState(null);
   const [profileImg, setProfileImg] = useState(null);

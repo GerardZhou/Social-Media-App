@@ -14,7 +14,7 @@ import LoadingSpinner from "./components/common/LoadingSpinner";
 
 function App() {
   const { data: authUser, isLoading } = useQuery({
-    queryKey: ["authUser"],
+    queryKey: ["authUser"], // unique key for the query
     queryFn: async () => {
       try {
         const res = await fetch("/api/auth/me");
@@ -28,6 +28,7 @@ function App() {
         throw new Error(error);
       }
     },
+    retry: false,
   });
 
   if (isLoading) {
