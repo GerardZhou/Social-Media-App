@@ -5,10 +5,12 @@ import { IoNotifications } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { BiLogOut } from "react-icons/bi";
-import { useMutation } from "@tanstack/react-query";
+import { Query, useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Sidebar = () => {
+  const queryClient = useQueryClient();
   const { mutate: logout } = useMutation({
     mutationFn: async () => {
       try {
@@ -25,7 +27,8 @@ const Sidebar = () => {
       }
     },
     onSuccess: () => {
-      toast.success("Logged out successfully.");
+      // refetch authUser to update UI
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
     },
     onError: () => {
       toast.error("Logout failed");
