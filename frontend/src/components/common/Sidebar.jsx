@@ -9,6 +9,16 @@ import { Query, useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import { useQuery } from "@tanstack/react-query";
+const fetchAuthUser = async () => {
+  const res = await fetch("/api/auth/me");
+
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(data.error || "Failed to fetch auth user");
+  }
+
+  return data;
+};
 
 const Sidebar = () => {
   const queryClient = useQueryClient();
@@ -38,6 +48,7 @@ const Sidebar = () => {
 
   const { data: authUser } = useQuery({
     queryKey: ["authUser"],
+    // queryFn: fetchAuthUser,
   });
 
   return (
