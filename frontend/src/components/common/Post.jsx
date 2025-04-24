@@ -5,11 +5,33 @@ import { FaRegBookmark } from "react-icons/fa6";
 import { FaTrash } from "react-icons/fa";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 const Post = ({ post }) => {
   const [comment, setComment] = useState("");
   const { data: authUser } = useQuery({ queryKey: ["authUser"] });
+  const { mutate: deletePost, isPending } = useMutation({
+    mutationFn: async () => {
+      try {
+        const res = await fetch("/api/posts/${post._id}", {
+          method: "DELETE",
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.error || "Something went wrong!");
+        }
+        return data;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+    onSuccess: () => {
+      toast.success("Post deleted successfully!");
+      // invalidate the query to refetch the posts
+    },
+  });
+
   const postOwner = post.user;
   const isLiked = false;
 
@@ -19,7 +41,9 @@ const Post = ({ post }) => {
 
   const isCommenting = false;
 
-  const handleDeletePost = () => {};
+  const handleDeletePost = () => {
+    deletePost();
+  };
 
   const handlePostComment = (e) => {
     e.preventDefault();
