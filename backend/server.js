@@ -24,7 +24,7 @@ const app = express();
 
 app.use(cors(corsOption));
 
-app.use(express.json()); // middleware used to parse req body
+app.use(express.json({ limit: "5mb" })); // middleware used to parse req body
 app.use(express.urlencoded({ extended: true })); // middleware used to parse form data (urlencoded)
 
 app.use(cookieParser());
